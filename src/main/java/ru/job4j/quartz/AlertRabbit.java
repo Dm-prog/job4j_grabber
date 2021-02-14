@@ -25,7 +25,7 @@ public class AlertRabbit {
             JobDetail job = newJob(Rabbit.class).build();
             //Создание расписания.
             SimpleScheduleBuilder times = simpleSchedule()
-                    .withIntervalInSeconds(10)
+                    .withIntervalInSeconds(Integer.parseInt(config.getProperty("rabbit.interval")))
                     .repeatForever();
             //Задача выполняется через триггер.
             Trigger trigger = newTrigger()
