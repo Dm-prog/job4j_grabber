@@ -14,5 +14,11 @@ public class SqlRuParse {
             System.out.println(href.attr("href"));
             System.out.println(href.text());
         }
+        Elements date = doc.select(".altCol");
+        for (Element td : date) {
+            Element href = td.child(0);
+            System.out.println(href.attr("href"));
+            System.out.println(href.text());
+        }
     }
 }
