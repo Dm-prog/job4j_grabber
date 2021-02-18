@@ -4,10 +4,7 @@ import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Properties;
 
 import static org.quartz.JobBuilder.newJob;
@@ -61,9 +58,8 @@ public class AlertRabbit {
         @Override
         public void execute(JobExecutionContext context) {
             Connection connection = (Connection) context.getJobDetail().getJobDataMap().get("connection");
-            PreparedStatement preparedStatement;
-            try {
-                preparedStatement = connection.prepareStatement("insert into rabbit (created_date) values (?)");
+            try (PreparedStatement preparedStatement = connection.prepareStatement(
+                    "insert into rabbit (created_date) values (?)")){
                 preparedStatement.setLong(1, System.currentTimeMillis());
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
