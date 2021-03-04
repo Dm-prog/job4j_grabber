@@ -1,32 +1,45 @@
 package ru.job4j.html;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ParseDate {
-    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy, HH:mm", Locale.US);
-    public void parse() throws IOException, ParseException {
-        Document doc = Jsoup.connect("https://www.sql.ru/forum/job-offers").get();
-        Elements row = doc.select(".postslisttopic");
-        for (Element td : row) {
-            Element href = td.child(0);
-            System.out.println(href.attr("href"));
-            System.out.println(href.text());
 
-            Element data = td.parent().child(5);
-            System.out.println(data.text());
-            String dateInString = data.text();
-            dateFormat.applyPattern(dateInString);
-            Date date = dateFormat.parse(dateInString);
-            System.out.println(dateFormat.format(date));
+    public static void main(String[] args) {
+        System.out.println(new ParseDate().parse("вчера"));
+    }
+
+    private final static Map<String, Integer> MONTH_MAPPER = new HashMap<>() {
+        {
+            put("янв", 1);
+            put("фев", 2);
+            put("мар", 3);
+            put("апр", 4);
+            put("май", 5);
+            put("июн", 6);
+            put("июл", 7);
+            put("авг", 8);
+            put("сен", 9);
+            put("окт", 10);
+            put("ноя", 11);
+            put("дек", 12);
         }
+    };
+
+    public LocalDate parse(String date) {
+
+        String[] parts = date.split(" ");
+        if (parts[0].replace(",", "").equals("вчера")) {
+            return LocalDate.now().minusDays(1);
+        } else if (parts[0].replace(",", "").equals("сегодня")) {
+            return LocalDate.now();
+        }
+        int day = Integer.parseInt(parts[0]);
+        int month = MONTH_MAPPER.get(parts[1]);
+        int year = 2000 + Integer.parseInt(parts[2].replace(",", ""));
+        return LocalDate.of(year, month, day);
     }
 }

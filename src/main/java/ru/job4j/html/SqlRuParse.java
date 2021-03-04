@@ -6,13 +6,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 public class SqlRuParse {
-    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy, HH:mm", Locale.US);
 
     public static void main(String[] args) throws Exception {
         parsePage();
@@ -32,8 +27,11 @@ public class SqlRuParse {
             //Получаем текст строки
             System.out.println(href.text());
             //Получаем 6-ой элемент от...
-            Element data = td.parent().child(5);
-            System.out.println(data.text());
+            Element date = td.parent().child(5);
+            System.out.println(date.text());
+
+            ParseDate parseDate = new ParseDate();
+            System.out.println(parseDate.parse(date.text()));
         }
     }
 }
