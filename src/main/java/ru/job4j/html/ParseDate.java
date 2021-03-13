@@ -49,10 +49,7 @@ public class ParseDate {
     public List<String> resources() {
         List<String> list = new ArrayList<>();
         for (int page = 1; page <= 5; page++) {
-            //list.add(String.format("%s/%s", RESOURCE, page));
-            list.add(String.join(""
-                    , (RESOURCE.substring(0, RESOURCE.length() - 1))
-                    , String.valueOf(page)));
+            list.add(String.format("%s/%s", RESOURCE, page));
         }
         return list;
     }
