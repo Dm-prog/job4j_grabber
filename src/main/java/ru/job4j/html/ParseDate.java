@@ -1,5 +1,6 @@
 package ru.job4j.html;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,8 +9,7 @@ import java.util.Map;
 
 public class ParseDate {
 
-    public static void main(String[] args) {
-        //System.out.println(new ParseDate().parse("вчера"));
+    public static void main(String[] args) throws IOException {
         System.out.println(new ParseDate().resources());
     }
 
@@ -30,8 +30,6 @@ public class ParseDate {
         }
     };
 
-    private static final String RESOURCE = "https://www.sql.ru/forum/job-offers";
-
     public LocalDate parse(String date) {
 
         String[] parts = date.split(" ");
@@ -46,10 +44,10 @@ public class ParseDate {
         return LocalDate.of(year, month, day);
     }
 
-    public List<String> resources() {
+    public List<String> resources() throws IOException {
         List<String> list = new ArrayList<>();
         for (int page = 1; page <= 5; page++) {
-            list.add(String.format("%s/%s", RESOURCE, page));
+            SqlRuParse.parsePage(page);
         }
         return list;
     }

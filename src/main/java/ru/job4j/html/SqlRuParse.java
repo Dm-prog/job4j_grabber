@@ -9,13 +9,10 @@ import java.io.IOException;
 
 public class SqlRuParse {
 
-    public static void main(String[] args) throws Exception {
-        parsePage();
-    }
-
-    public static void parsePage() throws IOException {
+    public static void parsePage(int page) throws IOException {
+        String url = String.format("https://www.sql.ru/forum/job-offers/%d", page);
         // Получаем HTML страницу
-        Document doc = Jsoup.connect("https://www.sql.ru/forum/job-offers").get();
+        Document doc = Jsoup.connect(url).get();
         // Находим данные по критерию поиска ".postslisttopic"
         Elements row = doc.select(".postslisttopic");
         // Разбиваем по строкам
