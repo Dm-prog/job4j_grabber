@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class ParseDate {
+public class ParseDate {
 
     private final static Map<String, Integer> MONTH_MAPPER = new HashMap<>() {
         {
@@ -26,7 +26,7 @@ class ParseDate {
         }
     };
 
-    LocalDate parse(String date) {
+    static LocalDate parse(String date) {
 
         String[] parts = date.split(" ");
         if (parts[0].replace(",", "").equals("вчера")) {

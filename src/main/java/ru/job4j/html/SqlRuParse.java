@@ -4,15 +4,20 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import ru.job4j.model.Post;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SqlRuParse {
 
-    public static void main(String[] args) throws IOException {
-        System.out.println(resources());
+    public static void main(String[] args)  {
+        System.out.println();
     }
 
     public static void parsePage(int page) throws IOException {
@@ -33,8 +38,7 @@ public class SqlRuParse {
             Element date = td.parent().child(5);
             System.out.println(date.text());
 
-            ParseDate parseDate = new ParseDate();
-            System.out.println(parseDate.parse(date.text()));
+            System.out.println(ParseDate.parse(date.text()));
         }
     }
 
@@ -44,5 +48,9 @@ public class SqlRuParse {
             parsePage(page);
         }
         return list;
+    }
+
+    public Post detail(String link) {
+        return new Post();
     }
 }
