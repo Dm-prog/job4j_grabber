@@ -7,11 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ParseDate {
-
-    public static void main(String[] args) throws IOException {
-        System.out.println(new ParseDate().resources());
-    }
+class ParseDate {
 
     private final static Map<String, Integer> MONTH_MAPPER = new HashMap<>() {
         {
@@ -30,7 +26,7 @@ public class ParseDate {
         }
     };
 
-    public LocalDate parse(String date) {
+    LocalDate parse(String date) {
 
         String[] parts = date.split(" ");
         if (parts[0].replace(",", "").equals("вчера")) {
@@ -42,13 +38,5 @@ public class ParseDate {
         int month = MONTH_MAPPER.get(parts[1]);
         int year = 2000 + Integer.parseInt(parts[2].replace(",", ""));
         return LocalDate.of(year, month, day);
-    }
-
-    public List<String> resources() throws IOException {
-        List<String> list = new ArrayList<>();
-        for (int page = 1; page <= 5; page++) {
-            SqlRuParse.parsePage(page);
-        }
-        return list;
     }
 }

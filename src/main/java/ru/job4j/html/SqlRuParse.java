@@ -6,8 +6,14 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SqlRuParse {
+
+    public static void main(String[] args) throws IOException {
+        System.out.println(resources());
+    }
 
     public static void parsePage(int page) throws IOException {
         String url = String.format("https://www.sql.ru/forum/job-offers/%d", page);
@@ -30,5 +36,13 @@ public class SqlRuParse {
             ParseDate parseDate = new ParseDate();
             System.out.println(parseDate.parse(date.text()));
         }
+    }
+
+    public static List<String> resources() throws IOException {
+        List<String> list = new ArrayList<>();
+        for (int page = 1; page <= 5; page++) {
+            parsePage(page);
+        }
+        return list;
     }
 }
