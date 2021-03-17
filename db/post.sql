@@ -3,5 +3,6 @@ create table post (
     title varchar(255) not null,
     author varchar(255) not null,
     date timestamp,
-    description text not null
+    description text not null,
+    link varchar(255) not null
 )
