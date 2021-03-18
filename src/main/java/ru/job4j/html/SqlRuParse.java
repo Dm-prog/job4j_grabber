@@ -7,17 +7,13 @@ import org.jsoup.select.Elements;
 import ru.job4j.model.Post;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class SqlRuParse {
 
-    public static void main(String[] args)  {
-        System.out.println();
+    public static void main(String[] args) {
+        System.out.println(detail("https://www.sql.ru/forum/1325330/lidy-be-fe-senior-cistemnye-analitiki-qa-i-devops-moskva-do-200t"));
     }
 
     public static void parsePage(int page) throws IOException {
@@ -50,7 +46,19 @@ public class SqlRuParse {
         return list;
     }
 
-    public Post detail(String link) {
-        return new Post();
+    public static Post detail(String url) {
+        Post post = new Post();
+        try {
+            Document doc = Jsoup.connect(url).get();
+            Elements comments = doc.select(".msgTable");
+            String description = comments.first().select(".msgBody").get(1).html();
+            String name = comments.first().select(".messageHeader").text();
+            String date = comments.last().select(".msgFooter").text();
+            date = date.substring(0, date.indexOf('[') - 1);
+            return new Post(name, url, description, ParseDate.parse(date));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return post;
     }
 }
