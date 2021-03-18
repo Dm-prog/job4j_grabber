@@ -4,16 +4,17 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import ru.job4j.grabber.Parse;
 import ru.job4j.model.Post;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SqlRuParse {
+public class SqlRuParse implements Parse {
 
     public static void main(String[] args) {
-        System.out.println(detail("https://www.sql.ru/forum/1325330/lidy-be-fe-senior-cistemnye-analitiki-qa-i-devops-moskva-do-200t"));
+        System.out.println(new SqlRuParse().detail("https://www.sql.ru/forum/1325330/lidy-be-fe-senior-cistemnye-analitiki-qa-i-devops-moskva-do-200t"));
     }
 
     public static void parsePage(int page) throws IOException {
@@ -46,7 +47,19 @@ public class SqlRuParse {
         return list;
     }
 
-    public static Post detail(String url) {
+    @Override
+    public List<Post> list(String link) throws IOException {
+        List<Post> posts = new ArrayList<>();
+        Document doc = Jsoup.connect(link).get();
+        Elements row = doc.select(".postslisttopic");
+        for (int i = 0; i < row.size(); i++) {
+            Element href = row.get(i).child(0);
+            posts.add(detail(href.attr("href")));
+        }
+        return posts;
+    }
+
+    public Post detail(String url) {
         Post post = new Post();
         try {
             Document doc = Jsoup.connect(url).get();
