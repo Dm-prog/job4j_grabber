@@ -68,7 +68,7 @@ public class SqlRuParse implements Parse {
             String name = comments.first().select(".messageHeader").text();
             String date = comments.last().select(".msgFooter").text();
             date = date.substring(0, date.indexOf('[') - 1);
-            return new Post(name, url, description, ParseDate.parse(date));
+            return new Post(name, description, url, ParseDate.parse(date));
         } catch (IOException e) {
             e.printStackTrace();
         }
