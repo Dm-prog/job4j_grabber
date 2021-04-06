@@ -13,8 +13,10 @@ import java.util.List;
 
 public class SqlRuParse implements Parse {
 
-    public static void main(String[] args) {
-        System.out.println(new SqlRuParse().detail("https://www.sql.ru/forum/1325330/lidy-be-fe-senior-cistemnye-analitiki-qa-i-devops-moskva-do-200t"));
+    public static void main(String[] args) throws IOException {
+        System.out.println(new SqlRuParse()
+                .detail("https://www.sql.ru/forum/1325330/lidy-be-fe-senior-cistemnye-analitiki-qa-i-devops-moskva-do-200t"));
+        System.out.println(resources());
     }
 
     public static void parsePage(int page) throws IOException {
@@ -52,8 +54,8 @@ public class SqlRuParse implements Parse {
         List<Post> posts = new ArrayList<>();
         Document doc = Jsoup.connect(link).get();
         Elements row = doc.select(".postslisttopic");
-        for (int i = 0; i < row.size(); i++) {
-            Element href = row.get(i).child(0);
+        for (Element element : row) {
+            Element href = element.child(0);
             posts.add(detail(href.attr("href")));
         }
         return posts;
