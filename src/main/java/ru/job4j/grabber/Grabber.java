@@ -17,8 +17,8 @@ import static org.quartz.TriggerBuilder.newTrigger;
 public class Grabber implements Grab {
     private final Properties cfg = new Properties();
 
-    public Store store() {
-        return null;
+    public Store store() throws SQLException {
+        return new PsqlStore(cfg);
     }
 
     public Scheduler scheduler() throws SchedulerException {
@@ -28,7 +28,7 @@ public class Grabber implements Grab {
     }
 
     public void cfg() throws IOException {
-        try (InputStream in = new FileInputStream(new File("app.properties"))) {
+        try (InputStream in = new FileInputStream(new File("grabber.properties"))) {
             cfg.load(in);
         }
     }
