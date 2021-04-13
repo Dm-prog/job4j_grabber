@@ -68,7 +68,8 @@ public class PsqlStore implements Store, AutoCloseable {
     @Override
     public void save(Post post) {
         try (PreparedStatement ps
-                     = cnn.prepareStatement("insert into post(title, description, link, LocalDate) values (?, ?, ?, ?);",
+                     = cnn.prepareStatement("insert into post(title, description, link, LocalDate) " +
+                        "values (?, ?, ?, ?) on conflict do nothing(*);",
                 Statement.RETURN_GENERATED_KEYS)) {
             LocalDate date = LocalDate.now();
             ps.setString(1, post.getTitle());
@@ -116,9 +117,9 @@ public class PsqlStore implements Store, AutoCloseable {
                     LocalDate date = LocalDate.now();
 
                     return new Post(
-                            resultSet.getString("link"),
                             resultSet.getString("title"),
                             resultSet.getString("description"),
+                            resultSet.getString("link"),
                             date
                     );
                 }

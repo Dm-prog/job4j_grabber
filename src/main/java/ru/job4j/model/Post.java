@@ -19,6 +19,15 @@ public class Post {
         this.date = date;
     }
 
+
+    public Post(int id, String title, String description, String link, LocalDate date) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.link = link;
+        this.date = date;
+    }
+
     public int getId() {
         return id;
     }
