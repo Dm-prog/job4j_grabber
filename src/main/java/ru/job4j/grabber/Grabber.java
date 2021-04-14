@@ -28,13 +28,15 @@ public class Grabber implements Grab {
     }
 
     public void cfg() throws IOException {
-        try (InputStream in = new FileInputStream(new File("grabber.properties"))) {
+        try (InputStream in = Grabber.class.getClassLoader().getResourceAsStream(
+                "grabber.properties")) {
             cfg.load(in);
         }
     }
 
     @Override
-    public void init(Parse parse, Store store, Scheduler scheduler) throws SchedulerException {
+    public void init(Parse parse, Store store, Scheduler scheduler)
+            throws SchedulerException {
         JobDataMap data = new JobDataMap();
         data.put("store", store);
         data.put("parse", parse);
