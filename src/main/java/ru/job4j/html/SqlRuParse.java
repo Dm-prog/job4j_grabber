@@ -8,6 +8,8 @@ import ru.job4j.grabber.Parse;
 import ru.job4j.model.Post;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,7 +72,9 @@ public class SqlRuParse implements Parse {
             String name = comments.first().select(".messageHeader").text();
             String date = comments.last().select(".msgFooter").text();
             date = date.substring(0, date.indexOf('[') - 1);
-            return new Post(name, description, url, ParseDate.parse(date));
+            LocalDate parse = ParseDate.parse(date);
+            Timestamp timestamp = Timestamp.valueOf(parse.atStartOfDay());
+            return new Post(name, description, url, timestamp);
         } catch (IOException e) {
             e.printStackTrace();
         }

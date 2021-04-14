@@ -1,5 +1,7 @@
 package ru.job4j.model;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 
 public class Post {
@@ -7,20 +9,19 @@ public class Post {
     private String title;
     private String description;
     private String link;
-    private LocalDate date;
+    private Timestamp date;
 
     public Post() {
     }
 
-    public Post(String title, String description, String link, LocalDate date) {
+    public Post(String title, String description, String link, Timestamp date) {
         this.title = title;
         this.description = description;
         this.link = link;
         this.date = date;
     }
 
-
-    public Post(int id, String title, String description, String link, LocalDate date) {
+    public Post(int id, String title, String description, String link, Timestamp date) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -60,11 +61,11 @@ public class Post {
         this.link = link;
     }
 
-    public LocalDate getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 

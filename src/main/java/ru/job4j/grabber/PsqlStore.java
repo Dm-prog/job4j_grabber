@@ -1,15 +1,14 @@
 package ru.job4j.grabber;
 
-import java.io.FileNotFoundException;
+import ru.job4j.html.SqlRuParse;
+import ru.job4j.model.Post;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.*;
-
-import ru.job4j.html.SqlRuParse;
-import ru.job4j.model.Post;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 
 public class PsqlStore implements Store, AutoCloseable {
@@ -67,15 +66,15 @@ public class PsqlStore implements Store, AutoCloseable {
 
     @Override
     public void save(Post post) {
-        try (PreparedStatement ps
-                     = cnn.prepareStatement("insert into post(title, description, link, LocalDate) " +
-                        "values (?, ?, ?, ?) on conflict do nothing(*);",
+        try (PreparedStatement ps = cnn.prepareStatement(
+                "insert into post(title, description, link, timestamp) "
+                        + "values (?, ?, ?, ?) on conflict (link) do nothing;",
                 Statement.RETURN_GENERATED_KEYS)) {
-            LocalDate date = LocalDate.now();
+
             ps.setString(1, post.getTitle());
             ps.setString(2, post.getDescription());
             ps.setString(3, post.getLink());
-            ps.setDate(4, Date.valueOf(post.getDate()));
+            ps.setTimestamp(4, post.getDate());
             ps.execute();
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
@@ -93,13 +92,11 @@ public class PsqlStore implements Store, AutoCloseable {
         try (PreparedStatement statement = cnn.prepareStatement("select * from post")) {
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    LocalDate date = LocalDate.now();
-
                     posts.add(new Post(
                             resultSet.getString("title"),
                             resultSet.getString("description"),
                             resultSet.getString("link"),
-                            date
+                            resultSet.getTimestamp("timestamp")
                     ));
                 }
             }
@@ -114,13 +111,11 @@ public class PsqlStore implements Store, AutoCloseable {
             statement.setInt(1, Integer.parseInt(id));
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    LocalDate date = LocalDate.now();
-
                     return new Post(
                             resultSet.getString("title"),
                             resultSet.getString("description"),
                             resultSet.getString("link"),
-                            date
+                            resultSet.getTimestamp("timestamp")
                     );
                 }
             }
