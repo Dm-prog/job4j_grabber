@@ -19,6 +19,6 @@ select p.name, c.name from person p join company c on c.id = p.company_id and p.
 
 -- Необходимо выбрать название компании с максимальным количеством
 -- человек + количество человек в этой компании.
-select c.name, (select sum(count(p.company_id))) as max_count_people_in_company
+select c.name, count(p.company_id) as max_count_people_in_company
 from person p join company c on c.id = p.company_id GROUP BY c.name order by count(*) desc
 limit 1;
