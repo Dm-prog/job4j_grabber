@@ -30,4 +30,4 @@ join users u on m.Id = u.meetings_id where u.status = true group by m.Name
 
 -- Нужно получить все совещания, где не было ни одной заявки на посещения
 select m.Name as meetings_without_users from meetings m
-join users u on m.Id = u.meetings_id where u.status = false
+left join users u on m.Id = u.meetings_id where u.status = false
