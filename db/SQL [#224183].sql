@@ -49,4 +49,4 @@ where u.request = true group by m.name
 select m.name as meetings_without_users from meetings m
 left join users_meetings um on m.id = um.meeting_id
 left join users u on u.id = um.user_id
-where u.request = false
+where u.request = false or u.request is null
