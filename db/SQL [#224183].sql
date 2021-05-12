@@ -1,33 +1,52 @@
 
 create table meetings
 (
-    Id serial primary key,
-    Name varchar(255)
+    id serial primary key,
+    name varchar(255)
 );
 
 create table users
 (
-    Id serial primary key,
-    Name varchar(255),
-    status boolean,
-    meetings_id integer references meetings(id)
+    id serial primary key,
+    name varchar(255),
+    request boolean
 );
 
-insert into users (Name, status, meetings_id) values
-('Ivan', true, 1),
-('Andrey', true, 2),
-('Evgeniy', true, 2),
-('Boris', false, 1);
+create table users_meetings
+(
+    user_id integer not null,
+    meeting_id integer not null,
+    foreign key(user_id) references users(id),
+    foreign key(meeting_id) references users(id)
+);
+
+insert into users (Name, request) values
+('Ivan', true),
+('Andrey', true),
+('Evgeniy', true),
+('Boris', false);
 
 insert into meetings (Name) values
 ('conference'),
-('corporate_events');
+('corporate_events'),
+('business_meeting');
+
+insert into users_meetings values
+(1, 1),
+(1, 2),
+(2, 2),
+(3, 1),
+(4, 3);
 
 -- Нужно написать запрос, который получит список
 -- всех заяков и количество подтвердивших участников.
-select m.Name as list_of_meetings, count(*) as count_users from meetings m
-join users u on m.Id = u.meetings_id where u.status = true group by m.Name
+select m.name as list_of_meetings, count(*) as count_users from meetings m
+join users_meetings um on m.id = um.meeting_id
+join users u on u.id = um.users_id
+where u.request = true group by m.name
 
 -- Нужно получить все совещания, где не было ни одной заявки на посещения
-select m.Name as meetings_without_users from meetings m
-left join users u on m.Id = u.meetings_id where u.status = false
+select m.name as meetings_without_users from meetings m
+left join users_meetings um on m.id = um.meeting_id
+left join users u on u.id = um.user_id
+where u.request = false
